@@ -171,5 +171,3 @@ Tested manually via Postman and Swagger UI:
 - [ ] Automated integration tests (`@SpringBootTest` + `MockMvc`)
 
 ---
-
-Built as a learning project to understand the system design behind quick-commerce platforms like Blinkit — from schema design through to production-style authentication and error handling.
