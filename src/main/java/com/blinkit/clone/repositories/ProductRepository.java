@@ -7,13 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-
     @Query("""
         SELECT new com.blinkit.clone.dtos.ProductCardDto(
             p.id, p.slug, p.name, p.image, p.mrp, p.sellingPrice, p.unit,
@@ -22,7 +20,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         LEFT JOIN Inventory i ON i.product = p AND i.darkStore.id = :storeId
         WHERE p.active = true
           AND (:categoryId IS NULL OR p.category.id = :categoryId)
-          AND (:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')))
+          AND (:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', CAST(:keyword AS string), '%')))
           AND (:minPrice IS NULL OR p.sellingPrice >= :minPrice)
           AND (:maxPrice IS NULL OR p.sellingPrice <= :maxPrice)
         """)
@@ -34,7 +32,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             @Param("maxPrice") Double maxPrice,
             Pageable pageable
     );
-
     Optional<Product> findBySlugAndActiveTrue(String slug);
-
 }
